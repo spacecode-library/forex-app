@@ -7,213 +7,12 @@
         <p class="text-gray-600">System overview and management tools</p>
       </div>
 
-      <!-- System Status Banner -->
-      <div v-if="systemStatus" class="mb-6 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <div :class="[
-              'w-3 h-3 rounded-full mr-3',
-              isSystemHealthy ? 'bg-green-500' : 'bg-red-500'
-            ]"></div>
-            <span class="text-sm font-medium">
-              System Status: {{ isSystemHealthy ? 'Operational' : 'Issues Detected' }}
-            </span>
-          </div>
-          <div class="text-xs text-gray-500">
-            Last updated: {{ formatTime(new Date()) }}
-          </div>
-        </div>
-      </div>
-
-      <!-- Quick Stats -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <StatCard
-          title="Total Users"
-          :value="String(dashboardData?.users?.total || 0)"
-          icon="UserGroupIcon"
-          color="blue"
-        />
-        <StatCard
-          title="Active Users"
-          :value="String(dashboardData?.users?.active || 0)"
-          icon="UserIcon"
-          color="green"
-        />
-        <StatCard
-          title="Total Trades"
-          :value="String(dashboardData?.trades?.total || 0)"
-          icon="ChartBarIcon"
-          color="purple"
-        />
-        <StatCard
-          title="System P&L"
-          :value="formatCurrency(dashboardData?.financials?.total_profit || 0)"
-          :icon="(dashboardData?.financials?.total_profit || 0) >= 0 ? 'ArrowTrendingUpIcon' : 'ArrowTrendingDownIcon'"
-          :color="(dashboardData?.financials?.total_profit || 0) >= 0 ? 'green' : 'red'"
-        />
-      </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- System Overview -->
-        <div class="lg:col-span-2 space-y-8">
-          <!-- User Distribution -->
-          <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div class="px-6 py-4 border-b border-gray-200">
-              <h3 class="text-lg font-semibold text-gray-900 flex items-center">
-                <UserGroupIcon class="w-5 h-5 mr-2 text-blue-600" />
-                User Distribution
-              </h3>
-            </div>
-            <div class="p-6">
-              <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                <div class="text-center">
-                  <div class="text-2xl font-bold text-blue-600">
-                    {{ dashboardData?.users?.total || 0 }}
-                  </div>
-                  <div class="text-sm text-gray-500">Total Users</div>
-                </div>
-                <div class="text-center">
-                  <div class="text-2xl font-bold text-green-600">
-                    {{ dashboardData?.users?.active || 0 }}
-                  </div>
-                  <div class="text-sm text-gray-500">Active Users</div>
-                </div>
-                <div class="text-center">
-                  <div class="text-2xl font-bold text-purple-600">
-                    {{ dashboardData?.users?.demo_accounts || 0 }}
-                  </div>
-                  <div class="text-sm text-gray-500">Demo Accounts</div>
-                </div>
-                <div class="text-center">
-                  <div class="text-2xl font-bold text-orange-600">
-                    {{ dashboardData?.users?.live_accounts || 0 }}
-                  </div>
-                  <div class="text-sm text-gray-500">Live Accounts</div>
-                </div>
-              </div>
-
-              <!-- Account Type Chart -->
-              <div class="mt-6">
-                <div class="flex items-center justify-between mb-3">
-                  <span class="text-sm text-gray-600">Account Distribution</span>
-                  <span class="text-xs text-gray-500">
-                    {{ calculateAccountRatio() }}
-                  </span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    class="bg-purple-600 h-2 rounded-l-full"
-                    :style="{ width: `${getAccountPercentage('demo')}%` }"
-                  ></div>
-                  <div 
-                    class="bg-orange-600 h-2 rounded-r-full"
-                    :style="{ width: `${getAccountPercentage('live')}%`, marginLeft: `${getAccountPercentage('demo')}%` }"
-                  ></div>
-                </div>
-                <div class="flex justify-between text-xs text-gray-500 mt-1">
-                  <span>Demo ({{ getAccountPercentage('demo') }}%)</span>
-                  <span>Live ({{ getAccountPercentage('live') }}%)</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Trading Activity -->
-          <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div class="px-6 py-4 border-b border-gray-200">
-              <h3 class="text-lg font-semibold text-gray-900 flex items-center">
-                <ChartBarIcon class="w-5 h-5 mr-2 text-green-600" />
-                Trading Activity
-              </h3>
-            </div>
-            <div class="p-6">
-              <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                <div class="text-center">
-                  <div class="text-2xl font-bold text-gray-900">
-                    {{ dashboardData?.trades?.total || 0 }}
-                  </div>
-                  <div class="text-sm text-gray-500">Total Trades</div>
-                </div>
-                <div class="text-center">
-                  <div class="text-2xl font-bold text-blue-600">
-                    {{ dashboardData?.trades?.real || 0 }}
-                  </div>
-                  <div class="text-sm text-gray-500">Live Trades</div>
-                </div>
-                <div class="text-center">
-                  <div class="text-2xl font-bold text-purple-600">
-                    {{ dashboardData?.trades?.demo || 0 }}
-                  </div>
-                  <div class="text-sm text-gray-500">Demo Trades</div>
-                </div>
-                <div class="text-center">
-                  <div class="text-2xl font-bold text-yellow-600">
-                    {{ dashboardData?.trades?.open || 0 }}
-                  </div>
-                  <div class="text-sm text-gray-500">Open Positions</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Financial Overview -->
-          <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div class="px-6 py-4 border-b border-gray-200">
-              <h3 class="text-lg font-semibold text-gray-900 flex items-center">
-                <CurrencyDollarIcon class="w-5 h-5 mr-2 text-yellow-600" />
-                Financial Overview
-              </h3>
-            </div>
-            <div class="p-6">
-              <div class="space-y-4">
-                <div class="flex justify-between items-center">
-                  <span class="text-sm text-gray-600">Total System P&L</span>
-                  <span :class="[
-                    'text-lg font-semibold',
-                    (dashboardData?.financials?.total_profit || 0) >= 0 ? 'text-green-600' : 'text-red-600'
-                  ]">
-                    {{ formatCurrency(dashboardData?.financials?.total_profit || 0) }}
-                  </span>
-                </div>
-                <div class="flex justify-between items-center">
-                  <span class="text-sm text-gray-600">Live Trading P&L</span>
-                  <span :class="[
-                    'font-semibold',
-                    (dashboardData?.financials?.real_profit || 0) >= 0 ? 'text-green-600' : 'text-red-600'
-                  ]">
-                    {{ formatCurrency(dashboardData?.financials?.real_profit || 0) }}
-                  </span>
-                </div>
-                <div class="flex justify-between items-center">
-                  <span class="text-sm text-gray-600">Demo Trading P&L</span>
-                  <span :class="[
-                    'font-semibold',
-                    (dashboardData?.financials?.demo_profit || 0) >= 0 ? 'text-green-600' : 'text-red-600'
-                  ]">
-                    {{ formatCurrency(dashboardData?.financials?.demo_profit || 0) }}
-                  </span>
-                </div>
-                <div class="flex justify-between items-center pt-2 border-t">
-                  <span class="text-sm text-gray-600">Total User Balance</span>
-                  <span class="font-semibold text-gray-900">
-                    {{ formatCurrency(dashboardData?.financials?.total_user_balance || 0) }}
-                  </span>
-                </div>
-                <div class="flex justify-between items-center">
-                  <span class="text-sm text-gray-600">Live/Demo Ratio</span>
-                  <span class="font-medium text-gray-900">
-                    {{ calculateTradeRatio() }}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         <!-- Quick Actions & System Status -->
-        <div class="lg:col-span-1 space-y-6">
-          <!-- Quick Actions -->
-          
+        <div class="lg:col-span-1 space-y-6">     
 
           <!-- System Status -->
           <div class="bg-white rounded-lg shadow-sm border border-gray-200">
@@ -257,28 +56,15 @@
                 <span class="text-xs font-medium text-blue-600">{{ dashboardData?.users?.admins || 0 }}</span>
               </div>
             </div>
-          </div>
 
-          <!-- Recent Activity -->
-          <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div class="px-6 py-4 border-b border-gray-200">
-              <h3 class="text-lg font-semibold text-gray-900">System Info</h3>
-            </div>
-            <div class="p-6">
-              <div class="space-y-3 text-sm">
-                <div class="flex justify-between">
-                  <span class="text-gray-600">Version</span>
-                  <span class="font-medium">v1.0.0</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-gray-600">Environment</span>
-                  <span class="font-medium">Production</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-gray-600">Uptime</span>
-                  <span class="font-medium">{{ calculateUptime() }}</span>
-                </div>
-              </div>
+            <div class="px-6 py-4 border-t border-gray-100 flex justify-end">
+              <button
+                @click="$router.push('/admin/users')"
+                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 transition"
+              >
+                <UserIcon class="w-5 h-5 mr-2" />
+                Manage Users
+              </button>
             </div>
           </div>
         </div>

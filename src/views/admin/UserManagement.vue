@@ -248,13 +248,13 @@
                     >
                       <PencilIcon class="h-4 w-4" />
                     </button>
-                    <button
+                    <!-- <button
                       @click="resetPassword(user)"
                       class="text-yellow-600 hover:text-yellow-900"
                       title="Reset password"
                     >
                       <KeyIcon class="h-4 w-4" />
-                    </button>
+                    </button> -->
                     <button
                       @click="toggleUserStatus(user)"
                       :class="[

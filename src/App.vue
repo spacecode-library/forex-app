@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="min-h-screen bg-gray-50 dark:bg-gray-900">
+  <div id="app" class="min-h-screen">
     <!-- Navigation -->
     <Navbar v-if="!isAuthPage" />
     
@@ -12,7 +12,7 @@
     <LoadingOverlay v-if="isLoading" />
     
     <!-- Toast Notifications -->
-    <ToastContainer />
+    <!-- <ToastContainer /> -->
   </div>
 </template>
 

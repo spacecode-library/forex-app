@@ -3,16 +3,11 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <!-- Left side -->
-        <div class="flex items-center">
-          <!-- Logo -->
-          <div class="flex-shrink-0 flex items-center">
-            <!-- <router-link to="/dashboard" class="text-xl font-bold text-blue-600">
-              MetaTrader
-            </router-link> -->
-          </div>
+        <div class="flex  items-center">
+
           
           <!-- Navigation Links -->
-          <div class=" md:ml-8 flex space-x-4 md:space-x-8">
+          <div class=" md:ml-8 flex space-x-10  md:space-x-8">
             <router-link
               v-for="item in navigationItems"
               :key="item.name"
@@ -23,7 +18,7 @@
                 { 'border-blue-500 text-blue-600': $route.path === item.to }
               ]"
             >
-            <div class="text-center">
+            <div class=" flex flex-col items-center text-center">
               <component :is="item.icon" class="w-6 h-6 mr-1 leading-none inline-block" />
               <span class="text-xs">{{ item.name }}</span>
             </div>
