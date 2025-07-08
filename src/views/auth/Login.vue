@@ -89,20 +89,6 @@
                   Use these credentials
                 </button>
               </div>
-              <div class="bg-gray-50 p-3 rounded">
-                <div class="font-medium text-gray-700">Regular User</div>
-                <div class="text-gray-600 mt-1">
-                  <div>Username: trader</div>
-                  <div>Password: trader123</div>
-                </div>
-                <button
-                  type="button"
-                  @click="fillDemoCredentials('trader')"
-                  class="mt-2 text-blue-600 hover:text-blue-500 text-xs"
-                >
-                  Use these credentials
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -149,9 +135,6 @@ const fillDemoCredentials = (type) => {
   if (type === 'admin') {
     form.value.username = 'admin'
     form.value.password = 'admin123'
-  } else {
-    form.value.username = 'trader'
-    form.value.password = 'trader123'
-  }
+  } 
 }
 </script>
