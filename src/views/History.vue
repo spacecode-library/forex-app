@@ -464,20 +464,6 @@ onMounted(async () => {
           </div>
         </div>
 
-        <!-- <div class="">
-          <div class="">
-            <div class="flex items-center justify-between">
-              <p class="text-lg font-medium text-gray-500">Gross P&L</p>
-              <p :class="[
-                'text-lg font-bold',
-                totalGrossProfit >= 0 ? 'text-green-600' : 'text-red-600'
-              ]">
-                {{ formatCurrency(totalGrossProfit) }}
-              </p>
-            </div>
-          </div>
-        </div> -->
-
         <div class="">
           <div class="">
             <div class="flex items-center justify-between">
@@ -525,9 +511,9 @@ onMounted(async () => {
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Exit Price
                 </th>
-                <!-- <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Gross P&L
-                </th> -->
+                </th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Commission
                 </th>
@@ -595,13 +581,10 @@ onMounted(async () => {
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900">
                   {{ trade.exit_price ? formatPrice(trade.exit_price) : '---' }}
                 </td>
-                <!-- <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold">
-                  <span :class="[
-                    calculateGrossProfit(trade) >= 0 ? 'text-green-600' : 'text-red-600'
-                  ]">
-                    {{ formatCurrency(calculateGrossProfit(trade)) }}
-                  </span>
-                </td> -->
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900">
+                  {{ trade.gross_profit ? formatPrice(trade.gross_profit) : '---' }}
+                </td>
+
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600 font-medium">
                   -{{ formatCurrency(calculateCommission(trade)) }}
                 </td>
@@ -954,6 +937,6 @@ watch(filters, () => {
 }, { deep: true })
 
 onMounted(async () => {
-  await tradingStore.fetchTradeHistory(100)
+  await tradingStore.fetchTradeHistory(1000)
 })
 </script>

@@ -12,7 +12,7 @@
     <LoadingOverlay v-if="isLoading" />
     
     <!-- Toast Notifications -->
-    <!-- <ToastContainer /> -->
+    <ToastContainer />
   </div>
 </template>
 

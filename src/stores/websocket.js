@@ -477,6 +477,7 @@
 
 
 // stores/websocket.js (Enhanced for real-time position P&L)
+
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useAuthStore } from './auth'
@@ -578,6 +579,8 @@ export const useWebSocketStore = defineStore('websocket', () => {
   // 🚀 ENHANCED: Real-time message handling for positions
   const handleMessage = (data) => {
     const tradingStore = useTradingStore()
+
+    tradingStore.handleWebSocketMessage(JSON.stringify(data))
     
     switch (data.type) {
       case 'price_update':

@@ -148,16 +148,16 @@
 // export const adminAPI = {
 //   // Dashboard
 //   getDashboard: () => api.get('/admin/dashboard'),
-  
+
 //   // Initial Admin Setup
 //   createInitialAdmin: (data) => api.post('/admin/setup/create-admin', data),
-  
+
 //   // Admin Management
 //   createAdditionalAdmin: (userData) => api.post('/admin/create-admin', userData),
-  
+
 //   // User Profile Management
 //   createUser: (userData) => api.post('/admin/users', userData),
-  
+
 //   getUsers: (params = {}) => {
 //     const queryString = new URLSearchParams(
 //       Object.entries(params)
@@ -166,15 +166,15 @@
 //     ).toString()
 //     return api.get(`/admin/users?${queryString}`)
 //   },
-  
+
 //   updateUser: (userId, userData) => api.put(`/admin/users/${userId}`, userData),
-  
+
 //   resetUserPassword: (userId, newPassword) => 
 //     api.post(`/admin/users/${userId}/reset-password`, { new_password: newPassword }),
-  
+
 //   toggleUserStatus: (userId) => 
 //     api.post(`/admin/users/${userId}/toggle-status`),
-  
+
 //   deleteUser: (userId) => api.delete(`/admin/users/${userId}`)
 // }
 
@@ -245,7 +245,7 @@ api.interceptors.response.use(
 
 // Auth API
 export const authAPI = {
-  login: (credentials) => 
+  login: (credentials) =>
     api.post('/auth/login', credentials),
   getCurrentUser: () => api.get('/auth/me')
 }
@@ -261,16 +261,31 @@ export const userAPI = {
 export const tradingAPI = {
   placeTrade: (tradeData) => api.post('/trades/place', tradeData),
   closeTrade: (tradeId) => api.post(`/trades/close/${tradeId}`),
-  
-  getTradeHistory: (limit = 50, offset = 0) => 
+
+  getTradeHistory: (limit = 50, offset = 0) =>
     api.get(`/trades/history?limit=${limit}&offset=${offset}`),
-  
+
+  updateTrade: (tradeId, updates) => api.put(`/trades/update/${tradeId}`, updates),
+  getPendingOrders: () => api.get('/trades/pending-orders'),
+
+  cancelPendingOrder: async (tradeId) => {
+    try {
+      console.log('🚫 Cancelling pending order:', tradeId)
+      const result = await api.post(`/trades/cancel/${tradeId}`)
+      console.log('✅ Order cancelled:', result)
+      return result
+    } catch (error) {
+      console.error('❌ Failed to cancel order:', error)
+      throw error
+    }
+  },
+
   // Enhanced position fetching with better error handling
   getPositions: async () => {
     try {
       console.log('📡 Fetching positions from API...')
       const positions = await api.get('/trades/positions')
-      
+
       console.log('📡 API Response - Positions:', {
         count: positions.length,
         data: positions.map(p => ({
@@ -281,14 +296,18 @@ export const tradingAPI = {
           unrealized_pnl: p.unrealized_pnl
         }))
       })
-      
+
       return positions
     } catch (error) {
       console.error('❌ Failed to fetch positions:', error)
       throw error
     }
   },
-  
+  async getAccountInfo() {
+    const response = await api.get('/trades/account')
+    return response
+  },
+
   // Get specific position by ID
   getPosition: async (positionId) => {
     try {
@@ -301,9 +320,9 @@ export const tradingAPI = {
       throw error
     }
   },
-  
+
   getTradingSummary: () => api.get('/trades/summary'),
-  
+
   // Sync positions - force refresh from server
   syncPositions: async () => {
     try {
@@ -322,16 +341,16 @@ export const tradingAPI = {
 export const adminAPI = {
   // Dashboard
   getDashboard: () => api.get('/admin/dashboard'),
-  
+
   // Initial Admin Setup
   createInitialAdmin: (data) => api.post('/admin/setup/create-admin', data),
-  
+
   // Admin Management
   createAdditionalAdmin: (userData) => api.post('/admin/create-admin', userData),
-  
+
   // User Profile Management
   createUser: (userData) => api.post('/admin/users', userData),
-  
+
   getUsers: (params = {}) => {
     const queryString = new URLSearchParams(
       Object.entries(params)
@@ -340,16 +359,41 @@ export const adminAPI = {
     ).toString()
     return api.get(`/admin/users?${queryString}`)
   },
-  
+
   updateUser: (userId, userData) => api.put(`/admin/users/${userId}`, userData),
-  
-  resetUserPassword: (userId, newPassword) => 
+
+  resetUserPassword: (userId, newPassword) =>
     api.post(`/admin/users/${userId}/reset-password`, { new_password: newPassword }),
-  
-  toggleUserStatus: (userId) => 
+
+  toggleUserStatus: (userId) =>
     api.post(`/admin/users/${userId}/toggle-status`),
-  
-  deleteUser: (userId) => api.delete(`/admin/users/${userId}`)
+
+  deleteUser: (userId) => api.delete(`/admin/users/${userId}`),
+
+  async getUserLeverage(userId) {
+    const response = await api.get(`/admin/users/${userId}/leverage`)
+    return response.data
+  },
+
+  async updateUserLeverage(userId, leverageData) {
+    const response = await api.put(`/admin/users/${userId}/leverage`, leverageData)
+    return response.data
+  },
+
+  async bulkUpdateLeverage(data) {
+    const response = await api.post('/admin/users/bulk-leverage', data)
+    return response.data
+  },
+
+  async getLeverageStatistics() {
+    const response = await api.get('/admin/leverage/statistics')
+    return response.data
+  },
+
+  async resetUserLeverage(userId) {
+    const response = await api.post(`/admin/users/${userId}/reset-leverage`)
+    return response.data
+  },
 }
 
 // System API
@@ -360,7 +404,7 @@ export const systemAPI = {
 
 // Price API
 export const priceAPI = {
-  getHistoricalPrices: (symbol, timeframe, from, to) => 
+  getHistoricalPrices: (symbol, timeframe, from, to) =>
     api.get(`/prices/historical/${symbol}?timeframe=${timeframe}&from=${from}&to=${to}`)
 }
 
@@ -392,7 +436,7 @@ export const debugAPI = {
       throw error
     }
   },
-  
+
   // Test specific position
   testPosition: async (positionId) => {
     try {

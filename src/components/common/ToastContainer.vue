@@ -1,36 +1,25 @@
 <template>
-  <div class="fixed top-4 right-50 z-50 space-y-2">
-    <transition-group
-      name="toast"
-      tag="div"
-    >
+  <div class="fixed top-4 right-4 z-50 space-y-2">
+    <transition-group name="toast" tag="div">
       <div
         v-for="toast in toasts"
         :key="toast.id"
         :class="[
-          'max-w-sm w-full shadow-lg rounded-lg pointer-events-auto overflow-hidden',
-          toastClasses[toast.type]
+          'max-w-sm w-full border rounded-md pointer-events-auto overflow-hidden bg-white',
+          toastBorderClasses[toast.type]
         ]"
       >
-        <div class="p-4">
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <component :is="toastIcons[toast.type]" class="h-5 w-64" />
-            </div>
-            <div class="">
-              <p class="text-sm font-medium">
-                {{ toast.message }}
-              </p>
-            </div>
-            <div class="ml-4 flex-shrink-0 flex">
-              <button
-                @click="removeToast(toast.id)"
-                class="inline-flex text-gray-400 hover:text-gray-600 focus:outline-none"
-              >
-                <XMarkIcon class="h-4 w-4" />
-              </button>
-            </div>
-          </div>
+        <div class="flex items-center p-4 space-x-3">
+          <component :is="toastIcons[toast.type]" class="h-6 w-6 text-blue-500" />
+          <p class="text-sm text-gray-800 flex-1">
+            {{ toast.message }}
+          </p>
+          <button
+            @click="removeToast(toast.id)"
+            class="text-gray-400 hover:text-gray-600 focus:outline-none"
+          >
+            <XMarkIcon class="h-5 w-5" />
+          </button>
         </div>
       </div>
     </transition-group>
@@ -49,14 +38,13 @@ import {
 } from '@heroicons/vue/24/outline'
 
 const toastStore = useToastStore()
-
 const toasts = computed(() => toastStore.toasts)
 
-const toastClasses = {
-  success: 'bg-green-500 text-white',
-  error: 'bg-red-500 text-white',
-  warning: 'bg-yellow-500 text-white',
-  info: 'bg-blue-500 text-white'
+const toastBorderClasses = {
+  success: 'border-blue-500',
+  error: 'border-blue-500',
+  warning: 'border-blue-500',
+  info: 'border-blue-500'
 }
 
 const toastIcons = {
@@ -74,16 +62,11 @@ const removeToast = (id) => {
 <style scoped>
 .toast-enter-active,
 .toast-leave-active {
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
-
-.toast-enter-from {
-  opacity: 0;
-  transform: translateX(100%);
-}
-
+.toast-enter-from,
 .toast-leave-to {
   opacity: 0;
-  transform: translateX(100%);
+  transform: translateX(50%);
 }
 </style>

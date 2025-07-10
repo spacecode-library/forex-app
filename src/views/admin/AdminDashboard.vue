@@ -211,12 +211,12 @@ const handleUserCreated = (user) => {
 onMounted(async () => {
   await refreshDashboard()
   
-  // Set up periodic refresh every 30 seconds
-  const interval = setInterval(refreshDashboard, 30000)
+  // // Set up periodic refresh every 30 seconds
+  // const interval = setInterval(refreshDashboard, 30000)
   
-  // Cleanup on unmount
-  onBeforeUnmount(() => {
-    clearInterval(interval)
-  })
+  // // Cleanup on unmount
+  // onBeforeUnmount(() => {
+  //   clearInterval(interval)
+  // })
 })
 </script>

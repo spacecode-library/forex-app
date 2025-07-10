@@ -29,12 +29,12 @@
         <!-- Right side -->
         <div class="flex items-center space-x-4">
           <!-- Balance Display -->
-          <div class="hidden sm:flex items-center bg-green-50 px-3 py-1 rounded-full">
+          <!-- <div class="hidden sm:flex items-center bg-green-50 px-3 py-1 rounded-full">
             <BanknotesIcon class="w-4 h-4 text-green-600 mr-1" />
             <span class="text-sm font-medium text-green-700">
               ${{ formatBalance(user?.balance || 0) }}
             </span>
-          </div>
+          </div> -->
 
           <!-- Connection Status -->
           <!-- <div class="flex items-center">
